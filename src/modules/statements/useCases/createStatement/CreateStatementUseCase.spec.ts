@@ -39,18 +39,18 @@ describe("Create Statement", () => {
     expect(response).toHaveProperty("id");
   });
 
-  it("should not be able create statement with nonexistent user", () => {
+  it("should not be able create statement with nonexistent user", async () => {
     expect(async () => {
       await createStatementUseCase.execute({
         user_id: "invalid_id",
         type: OperationType.DEPOSIT,
         amount: 1000,
         description: "Statement Description"
-      })
+      });
     }).rejects.toBeInstanceOf(CreateStatementError.UserNotFound);
   });
 
-  it("should not be able create withdraw statement with insufficient amount", () => {
+  it("should not be able create withdraw statement with insufficient amount", async () => {
     expect(async () => {
       const user = await createUserUseCase.execute({
         name: "User0",

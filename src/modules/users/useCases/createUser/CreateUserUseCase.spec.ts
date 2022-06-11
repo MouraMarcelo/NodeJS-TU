@@ -21,7 +21,7 @@ describe("Create User", () => {
     expect(user).toHaveProperty("id");
   });
 
-  it("should not be able to create a user with exists email", () => {
+  it("should not be able to create a user with exists email", async () => {
     expect(async () => {
       await createUserUseCase.execute({
         name: "User0",

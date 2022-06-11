@@ -7,14 +7,14 @@ import { GetBalanceError } from "./GetBalanceError";
 let inMemoryUsersRepository: InMemoryUsersRepository;
 let inMemoryStatementsRepository: InMemoryStatementsRepository;
 let createUserUseCase: CreateUserUseCase;
-let getBalance: GetBalanceUseCase;
+let getBalanceUseCase: GetBalanceUseCase;
 
 describe("Get User Balance", () => {
   beforeEach(() => {
     inMemoryUsersRepository = new InMemoryUsersRepository();
     inMemoryStatementsRepository = new InMemoryStatementsRepository();
     createUserUseCase = new CreateUserUseCase(inMemoryUsersRepository);
-    getBalance = new GetBalanceUseCase(
+    getBalanceUseCase = new GetBalanceUseCase(
       inMemoryStatementsRepository,
       inMemoryUsersRepository
       );
@@ -27,18 +27,18 @@ describe("Get User Balance", () => {
       password: "12345"
     });
 
-    const response = await getBalance.execute({
+    const response = await getBalanceUseCase.execute({
       user_id: user.id as string
     });
 
     expect(response).toHaveProperty("balance");
   });
 
-  it("should not be able to show a nonexistent user balance", () => {
+  it("should not be able to show a nonexistent user balance", async () => {
     expect(async () => {
-      await getBalance.execute({
+      await getBalanceUseCase.execute({
         user_id: "invalid_id"
-      })
+      });
     }).rejects.toBeInstanceOf(GetBalanceError);
   });
 })

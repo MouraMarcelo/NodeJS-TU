@@ -4,6 +4,7 @@ import { CreateUserUseCase } from "../../../users/useCases/createUser/CreateUser
 import { CreateStatementUseCase } from "../createStatement/CreateStatementUseCase"
 import { GetStatementOperationUseCase } from "./GetStatementOperationUseCase";
 import { GetStatementOperationError } from "./GetStatementOperationError";
+import { CreateStatementError } from "../createStatement/CreateStatementError";
 
 import { OperationType } from "../../entities/Statement";
 
@@ -69,10 +70,10 @@ describe("Get Statement Operation", () => {
         user_id: "invalid_user",
         statement_id: statement.id as string
       })
-    }).rejects.toBeInstanceOf(GetStatementOperationError.UserNotFound);
+    }).rejects.toBeInstanceOf(CreateStatementError.UserNotFound);
   });
 
-  it("should not be able to get statement with nonexistent user", () => {
+  it("should not be able to get statement with invalid statement id", () => {
     expect(async () => {
       const user = await createUserUseCase.execute({
         name: "User0",
@@ -80,7 +81,7 @@ describe("Get Statement Operation", () => {
         password: "12345"
       });
 
-      const statement = await createStatementUseCase.execute({
+      await createStatementUseCase.execute({
         user_id: user.id as string,
         type: OperationType.DEPOSIT,
         amount: 1000,
